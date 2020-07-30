@@ -2,11 +2,11 @@ import { version } from '../../package.json';
 import { Router } from 'express';
 import root from './root';
 import TelegramBot from 'node-telegram-bot-api';
-import { extractLink, validURL, downloadAlbum } from '../lib/util';
+import { extractLink, validURL } from '../lib/util';
 import download from 'download';
 
-export default ({ config, db }) => {
-	let bot = new TelegramBot('1363748593:AAHEXIOZYl8mZVRWuWD9F6RcDRpP054Do_s', {polling: true});
+export default () => {
+	let bot = new TelegramBot(process.env.BOT_TOKEN, {polling: true, filepath: false});
 	let api = Router();
 	// let xray = Xray();
 	api.use((req, res, next) => {
@@ -34,20 +34,13 @@ export default ({ config, db }) => {
 				throw Error('Invalid url');
 			}
 			const links = await extractLink(resp);
-			// const media = await downloadAlbum(links);
-			// downloadAlbum(links).then((media) => {
-			// 	console.log(media);
-			// 	bot.sendMediaGroup(chatId, media)
-			// });
-			// bot.sendMediaGroup(chatId, media);
-			bot.sendMessage(chatId, 'downloading');
+			bot.sendMessage(chatId, 'Begin downloading, please be patient');			
 			for (const i in links) {
-				download(links[i].image).then((image) => {
-					bot.sendPhoto(chatId, image);
+				download(links[i].media).then((image) => {
+					bot.sendDocument(chatId, image);
 				});
 			}
 		} catch (error) {
-			console.error(error);
 			bot.sendMessage(chatId, error.message);
 		}
 	});

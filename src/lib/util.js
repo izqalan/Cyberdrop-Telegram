@@ -39,18 +39,18 @@ export function validURL(str) {
 export function extractLink(url) {
   try {
     return xray(url, 'a.image', [{
-      image: '@href'
+      media: '@href'
     }]);
   } catch (error) {
     throw Error('Cannot find image');
   }
 }
 
-export function downloadAlbum(links){
+export async function downloadAlbum(links){
 	// 14.64s | 10.9 MB @  110Mbps
 	let media = [];
   for (const i in links){
-    download(links[i].image).then((image) => {
+    await download(links[i].media).then((image) => {
 			media.push(image);
 		});
 	}
