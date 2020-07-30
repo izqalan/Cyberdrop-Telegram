@@ -3,3 +3,6 @@
 /npm-debug.log
 /node_modules
 .DS_Store
+.env
+.package-lock.json
+/cert
