@@ -24,6 +24,7 @@
     "download": "^8.0.0",
     "eslint-plugin-import": "^2.22.0",
     "express": "^4.13.3",
+    "lodash": "^4.17.19",
     "morgan": "^1.8.0",
     "node-telegram-bot-api": "^0.50.0",
     "resource-router-middleware": "^0.6.0",
