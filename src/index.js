@@ -6,6 +6,9 @@ import bodyParser from 'body-parser';
 import api from './api';
 import config from './config.json';
 import dotenv from 'dotenv';
+import 'babel-core/register';
+import 'babel-polyfill';
+
 
 let app = express();
 dotenv.config();

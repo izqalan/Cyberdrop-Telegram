@@ -39,6 +39,7 @@ export function validURL(str) {
 export function extractLink(url) {
   try {
     return xray(url, 'a.image', [{
+			filename: '@title',
       media: '@href'
     }]);
   } catch (error) {
@@ -63,4 +64,8 @@ export function getTitle(url){
   } catch (error) {
     throw Error('Cannot find title');
   }
+}
+
+export function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
 }

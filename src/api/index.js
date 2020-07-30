@@ -2,7 +2,7 @@ import { version } from '../../package.json';
 import { Router } from 'express';
 import root from './root';
 import TelegramBot from 'node-telegram-bot-api';
-import { extractLink, validURL } from '../lib/util';
+import { extractLink, validURL, sleep } from '../lib/util';
 import download from 'download';
 
 export default () => {
@@ -20,13 +20,34 @@ export default () => {
 	api.use('/root', root);
 
 	bot.onText(/\/get (.+)/, async (msg, match) => {
-		// 'msg' is the received Message from Telegram
-		// 'match' is the result of executing the regexp above on the text content
-		// of the message
-	
 		const chatId = msg.chat.id;
-		const resp = match[1]; // the captured "whatever"
-		// send back the matched "whatever" to the chat
+		const resp = match[1];
+
+		try {
+			let isValid = validURL(resp);
+			if (!isValid) {
+				throw Error('Invalid url');
+			}
+			const links = await extractLink(resp);
+			if (links.length > 19) {
+				throw Error('Album is too big try using /getp <url>');
+			}
+			bot.sendMessage(chatId, 'Begin downloading, please be patient');			
+			for (const i in links) {
+				download(links[i].media).then((image) => {
+					bot.sendDocument(chatId, image, {}, {
+						filename: links[i].filename.replace(/\.[^/.]+$/, '')
+					});
+				});
+			}
+		} catch (error) {
+			bot.sendMessage(chatId, error.message);
+		}
+	});
+
+	bot.onText(/\/getp (.+)/, async (msg, match) => {
+		const chatId = msg.chat.id;
+		const resp = match[1];
 
 		try {
 			let isValid = validURL(resp);
@@ -36,8 +57,14 @@ export default () => {
 			const links = await extractLink(resp);
 			bot.sendMessage(chatId, 'Begin downloading, please be patient');			
 			for (const i in links) {
-				download(links[i].media).then((image) => {
-					bot.sendDocument(chatId, image);
+				download(links[i].media).then(async (image) => {
+					// if (i % 19 === 0) {
+					// 	console.log('slowing down');
+					// 	sleep(30000);
+					// }
+					bot.sendDocument(chatId, image, image, {}, {
+						filename: links[i].filename.replace(/\.[^/.]+$/, '')
+					});
 				});
 			}
 		} catch (error) {

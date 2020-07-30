@@ -1,5 +1,6 @@
 {
 	"port": 8080,
 	"bodyLimit": "100kb",
-	"corsHeaders": ["Link"]
+	"corsHeaders": ["Link"],
+	"presets": [ "es2015", "stage-0" ]
 }
