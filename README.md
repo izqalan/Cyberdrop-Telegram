@@ -1,24 +1,8 @@
-Express & ES6 REST API Boilerplate
-==================================
-
-This is a straightforward boilerplate for building REST APIs with ES6 and Express.
-
-- ES6 support via [babel](https://babeljs.io)
-- REST resources as middleware via [resource-router-middleware](https://github.com/developit/resource-router-middleware)
-- CORS support via [cors](https://github.com/troygoode/node-cors)
-- Body Parsing via [body-parser](https://github.com/expressjs/body-parser)
-
-> Tip: If you are using [Mongoose](https://github.com/Automattic/mongoose), you can automatically expose your Models as REST resources using [restful-mongoose](https://git.io/restful-mongoose).
-
-
-
-Getting Started
----------------
+## Getting Started
 
 ```sh
 # clone it
-git clone git@github.com:developit/express-es6-rest-api.git
-cd express-es6-rest-api
+git clone git@github.com:izqalan/Cyberdrop-Telegram.git
 
 # Make it your own
 rm -rf .git && git init && npm init
@@ -27,31 +11,34 @@ rm -rf .git && git init && npm init
 npm install
 
 # Start development live-reload server
-PORT=8080 npm run dev
+npm run dev
 
 # Start production server:
-PORT=8080 npm start
+npm start
 ```
-Docker Support
-------
+
+### Self deploy on heroku
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
+#### Create a Telegram Bot
+
+- Use BotFather on Telegram to create new bot. [BotFather](https://telegram.me/BotFather)
+
+Use this commande in BotFather chat to create new Bot:
+
 ```sh
-cd express-es6-rest-api
-
-# Build your docker
-docker build -t es6/api-service .
-#            ^      ^           ^
-#          tag  tag name      Dockerfile location
-
-# run your docker
-docker run -p 8080:8080 es6/api-service
-#                 ^            ^
-#          bind the port    container tag
-#          to your host
-#          machine port   
-
+/newbot
 ```
 
-License
--------
+- Save your Telegram Bot API Key for later.
+
+Your API Key should look something like this:
+
+```sh
+801650799:AAEYIthu4KWV14ZzKauXb5KdF8cKHRzluRE
+```
+
+Add `BOT_TOKEN` Config Vars on heroku. 
+
+## License
 
 MIT
