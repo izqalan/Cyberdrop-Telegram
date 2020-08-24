@@ -1,3 +1,11 @@
+## Usage
+add @CyberdropBot on Telegram
+```sh
+Commands: 
+/get <url> - Max album size 20 images.
+/getp <url> -  No Max album size.
+```
+
 ## Getting Started
 
 ```sh
