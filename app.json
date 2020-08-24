@@ -1,0 +1,7 @@
+{
+  "name": "CyberDrop Telegram Bot",
+  "description": "CyberDrop album downloader for Telegram",
+  "repository": "https://github.com/izqalan/Cyberdrop-Telegram",
+  "logo": "https://node-js-sample.herokuapp.com/node.png",
+  "keywords": ["node", "express", "telegram"]
+}

@@ -37,7 +37,7 @@ export function validURL(str) {
 }
 
 export function isPhoto(str) {
-	let pattern	= new RegExp('/\.(gif|jpe?g|tiff?|png|webp|bmp|mp4)$/i');
+	let pattern	= new RegExp('/\.(gif|jpe?g|tiff?|png|webp|bmp)$/i');
 	!!pattern.test(str);
 }
 

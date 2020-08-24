@@ -4,7 +4,7 @@ import root from './root';
 import TelegramBot from 'node-telegram-bot-api';
 import { extractLink, validURL, isPhoto } from '../lib/util';
 import download from 'download';
-import _, { size } from 'lodash';
+import _ from 'lodash';
 
 export default () => {
 	let bot = new TelegramBot(process.env.BOT_TOKEN, {polling: true, filepath: false});
@@ -93,7 +93,6 @@ export default () => {
 			for(const i in media.data) {
 				bot.sendMediaGroup(chatId, media.data[i]);
 			}
-			
 		} catch (error) {
 			bot.sendMessage(chatId, error.message);
 		}
