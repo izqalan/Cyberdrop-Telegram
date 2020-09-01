@@ -29,54 +29,37 @@ export default () => {
 			if (!isValid) {
 				throw Error('Invalid url');
 			}
+			
 			const links = await extractLink(resp);
+
 			if (links.length > 19) {
-				throw Error('Album is too big try using /getp <url>');
-			}
-			bot.sendMessage(chatId, 'Begin downloading, please be patient');			
-			for (const i in links) {
-				download(links[i].media).then((image) => {
-					bot.sendDocument(chatId, image, {}, {
-						filename: links[i].filename.replace(/\.[^/.]+$/, '')
+				bot.sendMessage(chatId, 'Begin downloading, please be patient');
+				for (const i in links) {
+					download(links[i].media).then(async (image) => {
+						bot.sendDocument(chatId, image, {}, {
+							filename: links[i].filename.replace(/\.[^/.]+$/, '')
+						});
 					});
-				});
+				}
+			} else {
+				bot.sendMessage(chatId, 'Begin downloading, please be patient');
+				for (const i in links) {
+					download(links[i].media).then((image) => {
+						bot.sendDocument(chatId, image, {}, {
+							filename: links[i].filename.replace(/\.[^/.]+$/, '')
+						});
+					});
+				}
 			}
 		} catch (error) {
 			bot.sendMessage(chatId, error.message);
 		}
 	});
 
-	bot.onText(/\/getp (.+)/, async (msg, match) => {
-		const chatId = msg.chat.id;
-		const resp = match[1];
-
-		try {
-			let isValid = validURL(resp);
-			if (!isValid) {
-				throw Error('Invalid url');
-			}
-			const links = await extractLink(resp);
-			bot.sendMessage(chatId, 'Begin downloading, please be patient');			
-			for (const i in links) {
-				download(links[i].media).then(async (image) => {
-					// if (i % 19 === 0) {
-					// 	console.log('slowing down');
-					// 	sleep(30000);
-					// }
-					bot.sendDocument(chatId, image, {}, {
-						filename: links[i].filename.replace(/\.[^/.]+$/, '')
-					});
-				});
-			}
-		} catch (error) {
-			bot.sendMessage(chatId, error.message);
-		}
-	});
 
 	bot.onText(/\/mini (.+)/, async (msg, match) => {
 		const chatId = msg.chat.id;
 		const resp = match[1];
-
 		try {
 			let isValid = validURL(resp);
 			if (!isValid) {
@@ -102,9 +85,8 @@ export default () => {
 		const chatId = msg.chat.id;
 		try {
 			bot.sendMessage(chatId, `Commands: 
-			/get <url> - Max album size 20 images.
-			/getp <url> -  No Max album size.
-			/mini <url> - Compressed grouped images. Buggy
+			/get <url> - Download album.
+			/mini <url> - Compressed grouped images. Buggy AF.
 			`);
 						
 		} catch (error) {

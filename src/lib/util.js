@@ -41,7 +41,7 @@ export function isPhoto(str) {
 	!!pattern.test(str);
 }
 
-export function extractLink(url) {
+export async function extractLink(url) {
   try {
     return xray(url, 'a.image', [{
 			filename: '@title',
