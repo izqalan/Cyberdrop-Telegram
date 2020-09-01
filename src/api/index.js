@@ -2,7 +2,7 @@ import { version } from '../../package.json';
 import { Router } from 'express';
 import root from './root';
 import TelegramBot from 'node-telegram-bot-api';
-import { extractLink, validURL, isPhoto } from '../lib/util';
+import { extractLink, validURL, isPhoto, extractGripe, validURLGripe, sleep } from '../lib/util';
 import download from 'download';
 import _ from 'lodash';
 
@@ -20,11 +20,48 @@ export default () => {
 
 	api.use('/root', root);
 
+	bot.onText(/\/gripe (.+)/, async (msg, match) => {
+		const chatId = msg.chat.id;
+		const resp = match[1];
+
+		try {
+			console.log('downloading from gripe');
+			let isValid = validURLGripe(resp);
+			if (!isValid) {
+				throw Error('Invalid url');
+			}
+			const links = await extractGripe(resp);
+			if (links.length > 19) {
+				bot.sendMessage(chatId, 'Begin downloading, please be patient');
+				for (const i in links) {
+					download(links[i].media).then(async (image) => {
+						bot.sendDocument(chatId, image, {}, {
+							filename: links[i].filename.replace(/\.[^/.]+$/, '')
+						});
+					});
+				}
+			} else {
+				bot.sendMessage(chatId, 'Begin downloading, please be patient');
+				for (const i in links) {
+					download(links[i].media).then((image) => {
+						bot.sendDocument(chatId, image, {}, {
+							filename: links[i].filename.replace(/\.[^/.]+$/, '')
+						});
+					});
+				}
+			}
+
+		} catch (error) {
+			bot.sendMessage(chatId, error.message);
+		}
+	});
+
 	bot.onText(/\/get (.+)/, async (msg, match) => {
 		const chatId = msg.chat.id;
 		const resp = match[1];
 
 		try {
+			console.log('downloading from cyberdrop');
 			let isValid = validURL(resp);
 			if (!isValid) {
 				throw Error('Invalid url');
@@ -85,7 +122,8 @@ export default () => {
 		const chatId = msg.chat.id;
 		try {
 			bot.sendMessage(chatId, `Commands: 
-			/get <url> - Download album.
+			/get <url> - Download cyberdrop album.
+			/gripe <url> - Download dmca gripe album. 👷‍ BETA
 			/mini <url> - Compressed grouped images. Buggy AF.
 			`);
 						

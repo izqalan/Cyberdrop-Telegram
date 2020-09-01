@@ -36,6 +36,16 @@ export function validURL(str) {
   return !!pattern.test(str);
 }
 
+export function validURLGripe(str) {
+  let pattern = new RegExp('^(https?:\\/\\/)?'+ // protocol
+    '((share\\.dmca\\.gripe*)|'+ // domain name
+    '((\\d{1,3}\\.){3}\\d{1,3}))'+ // OR ip (v4) address
+    '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ // port and path
+    '(\\?[;&a-z\\d%_.~+=-]*)?'+ // query string
+    '(\\#[-a-z\\d_]*)?$','i'); // fragment locator
+  return !!pattern.test(str);
+}
+
 export function isPhoto(str) {
 	let pattern	= new RegExp('/\.(gif|jpe?g|tiff?|png|webp|bmp)$/i');
 	!!pattern.test(str);
@@ -45,6 +55,17 @@ export async function extractLink(url) {
   try {
     return xray(url, 'a.image', [{
 			filename: '@title',
+      media: '@href'
+    }]);
+  } catch (error) {
+    throw Error('Cannot find image');
+  }
+}
+
+export async function extractGripe(url) {
+  try {
+    return xray(url, 'div.memeimg a', [{
+			filename: 'h1.title',
       media: '@href'
     }]);
   } catch (error) {

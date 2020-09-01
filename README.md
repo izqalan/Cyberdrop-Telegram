@@ -4,6 +4,7 @@ add `@CyberdropBot` on Telegram and message the following commands.
 Commands: 
 /help - Commands
 /get <url> - Download cyberdrop.me album.
+/gripe <url> - Download dmca gripe album. **BETA**
 ```
 
 ## Getting Started
