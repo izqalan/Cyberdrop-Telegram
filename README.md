@@ -3,8 +3,7 @@ add `@CyberdropBot` on Telegram and message the following commands.
 ```sh
 Commands: 
 /help - Commands
-/get <url> - Max album size 20 images.
-/getp <url> -  No Max album size.
+/get <url> - Download cyberdrop.me album.
 ```
 
 ## Getting Started
