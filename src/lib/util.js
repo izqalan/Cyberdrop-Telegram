@@ -9,52 +9,70 @@
  *		}
  */
 
- 
+
 import Xray from 'x-ray';
 import download from 'download';
+import JSzip from 'jszip';
 
 let xray = Xray();
 
-export function toRes(res, status=200) {
-	return (err, thing) => {
-		if (err) return res.status(500).send(err);
+export function toRes(res, status = 200) {
+  return (err, thing) => {
+    if (err) return res.status(500).send(err);
 
-		if (thing && typeof thing.toObject==='function') {
-			thing = thing.toObject();
-		}
-		res.status(status).json(thing);
-	};
+    if (thing && typeof thing.toObject === 'function') {
+      thing = thing.toObject();
+    }
+    res.status(status).json(thing);
+  };
 }
 
 export function validURL(str) {
-  let pattern = new RegExp('^(https?:\\/\\/)?'+ // protocol
-    '(((cyberdrop*)\\.)+[a-z]{2,}|'+ // domain name
-    '((\\d{1,3}\\.){3}\\d{1,3}))'+ // OR ip (v4) address
-    '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ // port and path
-    '(\\?[;&a-z\\d%_.~+=-]*)?'+ // query string
-    '(\\#[-a-z\\d_]*)?$','i'); // fragment locator
+  let pattern = new RegExp('^(https?:\\/\\/)?' + // protocol
+    '(((cyberdrop*)\\.)+[a-z]{2,}|' + // domain name
+    '((\\d{1,3}\\.){3}\\d{1,3}))' + // OR ip (v4) address
+    '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' + // port and path
+    '(\\?[;&a-z\\d%_.~+=-]*)?' + // query string
+    '(\\#[-a-z\\d_]*)?$', 'i'); // fragment locator
   return !!pattern.test(str);
 }
 
 export function validURLGripe(str) {
-  let pattern = new RegExp('^(https?:\\/\\/)?'+ // protocol
-    '((share\\.dmca\\.gripe*)|'+ // domain name
-    '((\\d{1,3}\\.){3}\\d{1,3}))'+ // OR ip (v4) address
-    '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ // port and path
-    '(\\?[;&a-z\\d%_.~+=-]*)?'+ // query string
-    '(\\#[-a-z\\d_]*)?$','i'); // fragment locator
+  let pattern = new RegExp('^(https?:\\/\\/)?' + // protocol
+    '((share\\.dmca\\.gripe*)|' + // domain name
+    '((\\d{1,3}\\.){3}\\d{1,3}))' + // OR ip (v4) address
+    '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' + // port and path
+    '(\\?[;&a-z\\d%_.~+=-]*)?' + // query string
+    '(\\#[-a-z\\d_]*)?$', 'i'); // fragment locator
   return !!pattern.test(str);
 }
 
 export function isPhoto(str) {
-	let pattern	= new RegExp('/\.(gif|jpe?g|tiff?|png|webp|bmp)$/i');
-	!!pattern.test(str);
+  let pattern = new RegExp('/\.(gif|jpe?g|tiff?|png|webp|bmp)$/i');
+  !!pattern.test(str);
+}
+
+export async function zip(images) {
+  const zip = new JSzip();
+
+  let promises = images.map(async (img) => {
+    await download(img.media).then(async (image) => {
+      zip.file(img.filename, image, { base64: true});
+    });
+    return zip;
+  });
+
+  return Promise.all(promises).then(async (zip) => {
+    // this defo gonna cause problem lmao
+    return zip[0];
+  });
+
 }
 
 export async function extractLink(url) {
   try {
     return xray(url, 'a.image', [{
-			filename: '@title',
+      filename: '@title',
       media: '@href'
     }]);
   } catch (error) {
@@ -65,7 +83,7 @@ export async function extractLink(url) {
 export async function extractGripe(url) {
   try {
     return xray(url, 'div.memeimg a', [{
-			filename: 'h1.title',
+      filename: 'h1.title',
       media: '@href'
     }]);
   } catch (error) {
@@ -73,22 +91,32 @@ export async function extractGripe(url) {
   }
 }
 
-export async function downloadAlbum(links){
-	// 14.64s | 10.9 MB @  110Mbps
-	let media = [];
-  for (const i in links){
+export async function downloadAlbum(links) {
+  // 14.64s | 10.9 MB @  110Mbps
+  let media = [];
+  for (const i in links) {
     await download(links[i].media).then((image) => {
-			media.push(image);
-		});
-	}
-	return media;
+      media.push(image);
+    });
+  }
+  return media;
 }
 
-export function getTitle(url){
+export function getTitle(url) {
   try {
-    return xray(url, 'div.level-item h1', '@title');
+    return xray(url, 'div h1', '@title');
   } catch (error) {
-    throw Error('Cannot find title');
+    throw Error('Could not find title');
+  }
+}
+
+export async function fileSize(url) {
+  try {
+    let size = await xray(url, 'span#totalAlbumSize');
+    size = size.replace(/[^0-9\.]+/g, '');
+    return parseInt(size);
+  } catch (error) {
+    throw Error('Cannot find album');
   }
 }
 
