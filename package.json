@@ -4,9 +4,9 @@
   "description": "cyberdrop telegram bot",
   "main": "dist",
   "scripts": {
-    "dev": "set NODE_ENV=development && nodemon -w src --exec \"babel-node src --presets es2015,stage-0\"",
+    "dev": "set NODE_ENV=development && nodemon -w src --exec \"babel-node src --presets es2015 --optimize_for_size --max_old_space_size=920,stage-0\"",
     "build": "babel src -s -D -d dist --presets es2015,stage-0",
-    "start": "babel-node dist",
+    "start": "babel-node --optimize_for_size --max_old_space_size=920 dist",
     "prestart": "npm run -s build",
     "test": "eslint src"
   },
