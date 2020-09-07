@@ -16,7 +16,10 @@ export default () => {
 	});
 	// perhaps expose some API metadata at the root
 	api.get('/', (req, res) => {
-		res.json({ version });
+		res.json({
+			status: 'I am alive!',
+			message: 'This shit is pain in the ass to maintain'
+		});
 	});
 
 	api.use('/root', root);
@@ -123,15 +126,15 @@ export default () => {
 		const resp = match[1];
 		const links = await extractLink(resp);
 		const title = await getTitle(resp);
-		const filesize = Math.ceil(await fileSize(resp) / 1048576); 
+		const filesize = Math.ceil(await fileSize(resp) / 1048576);
 		try {
 			bot.sendMessage(chatId, 'Begin downloading, please be patient');
 			if (filesize > 50) {
 				throw Error('Unfortunately only up to 50 MB of document size can be uploaded by Telegram bot. Use /get instead.');
 			}
 			zip(links).then(async (zip) => {
-				const content = await zip.generateAsync({type: 'nodebuffer'});
-				bot.sendDocument(chatId, content, {}, {filename: `${title}`});
+				const content = await zip.generateAsync({ type: 'nodebuffer' });
+				bot.sendDocument(chatId, content, {}, { filename: `${title}` });
 			});
 
 		} catch (error) {

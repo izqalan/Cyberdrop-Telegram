@@ -25,7 +25,7 @@ app.use(cors({
 app.use(bodyParser.json({
 	limit: config.bodyLimit
 }));
-app.use('/api/v1', api({ config }));
+app.use(api({ config }));
 
 app.server.listen(process.env.PORT || config.port, () => {
 	// eslint-disable-next-line no-console
