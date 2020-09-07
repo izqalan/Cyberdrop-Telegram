@@ -131,7 +131,7 @@ export default () => {
 			}
 			zip(links).then(async (zip) => {
 				const content = await zip.generateAsync({type: 'nodebuffer'});
-				bot.sendDocument(chatId, content, {}, {filename: `${title}.zip`});
+				bot.sendDocument(chatId, content, {}, {filename: `${title}`});
 			});
 
 		} catch (error) {
