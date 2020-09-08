@@ -1,11 +1,9 @@
-import { version } from '../../package.json';
 import { Router } from 'express';
 import root from './root';
 import TelegramBot from 'node-telegram-bot-api';
 import { extractLink, validURL, isPhoto, extractGripe, validURLGripe, zip, getTitle, fileSize } from '../lib/util';
 import download from 'download';
 import _ from 'lodash';
-import JSzip from 'jszip';
 
 export default () => {
 	let bot = new TelegramBot(process.env.BOT_TOKEN, { polling: true, filepath: false });
@@ -29,6 +27,9 @@ export default () => {
 		const resp = match[1];
 
 		try {
+			if (process.env.GRIPE_DISABLE) {
+				throw Error('This feature is temporarily disabled.');
+			}
 			console.log('downloading from gripe');
 			let isValid = validURLGripe(resp);
 			if (!isValid) {
@@ -66,6 +67,9 @@ export default () => {
 
 		try {
 			console.log('downloading from cyberdrop');
+			if (process.env.GET_DISABLE) {
+				throw Error('This feature is temporarily disabled.');
+			}
 			let isValid = validURL(resp);
 			if (!isValid) {
 				throw Error('Invalid url');
@@ -101,6 +105,9 @@ export default () => {
 		const chatId = msg.chat.id;
 		const resp = match[1];
 		try {
+			if (process.env.MINI_DISABLE) {
+				throw Error('This feature is temporarily disabled. Use /get instead.');
+			}
 			let isValid = validURL(resp);
 			if (!isValid) {
 				throw Error('Invalid url');
@@ -124,10 +131,14 @@ export default () => {
 	bot.onText(/\/zip (.+)/, async (msg, match) => {
 		const chatId = msg.chat.id;
 		const resp = match[1];
-		const links = await extractLink(resp);
-		const title = await getTitle(resp);
-		const filesize = Math.ceil(await fileSize(resp) / 1048576);
+
 		try {
+			if (process.env.ZIP_DISABLE) {
+				throw Error('This feature is temporarily disabled. Use /get instead.');
+			}
+			const links = await extractLink(resp);
+			const title = await getTitle(resp);
+			const filesize = Math.ceil(await fileSize(resp) / 1048576);
 			bot.sendMessage(chatId, 'Begin downloading, please be patient');
 			if (filesize > 50) {
 				throw Error('Unfortunately only up to 50 MB of document size can be uploaded by Telegram bot. Use /get instead.');
