@@ -27,7 +27,7 @@ export default () => {
 		const resp = match[1];
 
 		try {
-			if (process.env.GRIPE_DISABLE) {
+			if (process.env.GRIPE_DISABLE === true) {
 				throw Error('This feature is temporarily disabled.');
 			}
 			console.log('downloading from gripe');
@@ -67,7 +67,7 @@ export default () => {
 
 		try {
 			console.log('downloading from cyberdrop');
-			if (process.env.GET_DISABLE) {
+			if (process.env.GET_DISABLE === true) {
 				throw Error('This feature is temporarily disabled.');
 			}
 			let isValid = validURL(resp);
@@ -105,7 +105,7 @@ export default () => {
 		const chatId = msg.chat.id;
 		const resp = match[1];
 		try {
-			if (process.env.MINI_DISABLE) {
+			if (process.env.MINI_DISABLE === true) {
 				throw Error('This feature is temporarily disabled. Use /get instead.');
 			}
 			let isValid = validURL(resp);
@@ -133,7 +133,7 @@ export default () => {
 		const resp = match[1];
 
 		try {
-			if (process.env.ZIP_DISABLE) {
+			if (process.env.ZIP_DISABLE === true) {
 				throw Error('This feature is temporarily disabled. Use /get instead.');
 			}
 			const links = await extractLink(resp);
