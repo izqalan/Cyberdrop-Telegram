@@ -4,21 +4,4 @@
   "repository": "https://github.com/izqalan/Cyberdrop-Telegram",
   "logo": "https://node-js-sample.herokuapp.com/node.png",
   "keywords": ["node", "express", "telegram"]
-  ],
-  "success_url": "https://github.com/bnsave100/Cyberdrop-Telegram-1",
-  "website": "https://github.com/bnsave100/Cyberdrop-Telegram-1",
-  "repository": "https://github.com/bnsave100/Cyberdrop-Telegram-1",
-  "env": {
-    "WEBHOOK": {
-      "description": "Setting this to ANYTHING will enable webhooks when in env mode",
-      "value": "ANYTHING"
-   },
-    "BOT_TOKEN": {
-      "description": "Your bot token, as a string.",
-      "value": ""
-  ],
-  "formation": {
-    "worker": {
-      "quantity": 1,
-      "size": "free"
- }
+}
