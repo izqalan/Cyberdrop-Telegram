@@ -30,7 +30,7 @@ npm start
 ```
 
 ### Self deploy on heroku
-[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/bnsave100/Cyberdrop-Telegram-1)
 #### Create a Telegram Bot
 
 - Use BotFather on Telegram to create new bot. [BotFather](https://telegram.me/BotFather)
