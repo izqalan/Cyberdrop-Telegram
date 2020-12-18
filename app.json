@@ -5,5 +5,5 @@
   "logo": "https://node-js-sample.herokuapp.com/node.png",
   "keywords": ["node", "express", "telegram"]
 
-  "stack": "heroku-20"
+  "stack" == "heroku-20"
  }
