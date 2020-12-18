@@ -1,7 +1,34 @@
 {
-  "name": "CyberDrop Telegram Bot",
-  "description": "CyberDrop album downloader for Telegram",
-  "repository": "https://github.com/izqalan/Cyberdrop-Telegram",
-  "logo": "https://node-js-sample.herokuapp.com/node.png",
-  "keywords": ["node", "express", "telegram"]
+  "name": "cyberdrop telegram bot ",
+  "description": "dl from cyberdrop to tg.",
+  "keywords": [
+    "telegram",
+    "cyberdrop",
+    "downloader"
+  ],
+  "website": "https://github.com/bnsave100/Cyberdrop-Telegram-1/",
+  "repository": "https://github.com/bnsave100/Cyberdrop-Telegram-1",
+  "logo": "https://small-sharp-tool.com/logo.svg",
+  "success_url": "/welcome",
+  
+  "env": {
+    "BOT_TOKEN": {
+      "description": "from botfather."  
+    },
+    "WEB_CONCURRENCY": {
+      "description": "The number of processes to run.",
+      "value": "4"
+    }
+  },
+  "formation": {
+    "web": {
+      "quantity": 1,
+      "size": "free"
+    }
+  },
+  "stack": {
+    {
+   "stack": "heroku-20"
+    }
+  }
 }
