@@ -1,8 +1,9 @@
+## ⚠ Project no longer Maintained
+
 ### Status
 [![Heroku App Status](http://heroku-shields.herokuapp.com/cyberdrop-telegram)](https://cyberdrop-telegram.herokuapp.com)
 
-## Usage
-add `@CyberdropBot` on Telegram and message the following commands.
+## Available commands
 ```sh
 Commands: 
 /help - Commands
